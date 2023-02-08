@@ -1,7 +1,39 @@
+import { useFormik } from "formik";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../api/Authentication";
+import { config } from "../connection/Config";
 
 function Login() {
+  const navigate = useNavigate();
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validate: (values) => {
+      let error = {};
+      if (!values.email) {
+        error.email = "*Enter Registered Email Id";
+      }
+      if (!values.password) {
+        error.password = "*Required";
+      }
+      return error;
+    },
+    onSubmit: async (values) => {
+      try {
+        let logindata = await login(values);
+
+        localStorage.setItem(`${config.storage_key}`, logindata.data.token);
+        localStorage.setItem("un", logindata.data.uNm);
+        navigate(`/portal/book/${logindata.data.uId}`);
+      } catch (error) {
+        alert(error.response.data.message)
+      }
+
+    }
+  });
   return (
       <main >
         <div class="container" >
@@ -9,17 +41,25 @@ function Login() {
             <div class="col-lg-5">
               <div class="card shadow-lg border-0 rounded-lg mt-5">
                 <div class="card-header" style={{backgroundColor:"orange"}}>
-                  <h3 class="text-center font-weight-light my-4">Login</h3>
+                  <h3 class="text-center font-weight-light my-4">Login to Book Appointment</h3>
                 </div>
                 <div class="card-body">
-                  <form>
+                  <form onSubmit={formik.handleSubmit}>
                     <div class="form-floating mb-3">
                       <input
                         class="form-control"
                         id="inputEmail"
                         type="email"
+                        name="email"
+                        onChange={formik.handleChange}
+                        value={formik.values.email}
                         placeholder="name@example.com"
                       />
+                      {formik.touched.email && formik.errors.email ? (
+                            <span style={{ color: "red" }}>
+                              {formik.errors.email}
+                            </span>
+                          ) : null}
                       <label for="inputEmail">Email address</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -27,17 +67,24 @@ function Login() {
                         class="form-control"
                         id="inputPassword"
                         type="password"
+                        name="password"
+                        onChange={formik.handleChange}
+                        value={formik.values.password}
                         placeholder="Password"
                       />
+                      {formik.touched.password && formik.errors.password ? (
+                            <span style={{ color: "red" }}>
+                              {formik.errors.password}
+                            </span>
+                          ) : null}
                       <label for="inputPassword">Password</label>
                     </div>
                     <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                       <Link to={"/forgotpassword"} class="small">
                         Forgot Password?
                       </Link>
-                      <a class="btn btn-primary" href="index.html">
-                        Login
-                      </a>
+                      <input type={"submit"}  value={"Login"} class="btn btn-primary"/>                        
+                      
                     </div>
                   </form>
                 </div>
