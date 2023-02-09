@@ -3,6 +3,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api/Authentication";
 
+// User Registration
 function Registration() {
   const navigate = useNavigate();
   const formik = useFormik({

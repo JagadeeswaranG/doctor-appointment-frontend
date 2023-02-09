@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { forgotPassword } from "../api/Authentication";
 
+// Forgot password
 function Forgotpassword() {
   const formik = useFormik({
     initialValues: {

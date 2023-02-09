@@ -3,6 +3,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { resetPassword } from "../api/Authentication";
 
+// User Reset Password
 function Resetpassword() {
   const navigate = useNavigate();
   const search = useLocation().search;

@@ -22,7 +22,7 @@ function App() {
       <Route path='/passwordReset' element={<Resetpassword/>}></Route>
       <Route path='/portal' element={<Portal/>}>
         <Route path='book/:uId' element={<Appointment/>}/>
-        <Route path='confirm' element={<Confirmation/>}/>
+        <Route path='confirm/:pId/:uId' element={<Confirmation/>}/>
       </Route>
     </Routes>
     </BrowserRouter>
